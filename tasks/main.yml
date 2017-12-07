@@ -1,0 +1,15 @@
+---
+# tasks file for ansible-role-mysql
+
+- name: Install mysql packages
+  become: yes
+  apt: pkg={{ item }} state=installed
+  tags: [packages]
+  with_items:
+    - mysql-server
+
+- name: Set template extend_mysql.cnf file to vagrant home
+  template: src=extend_my.cnf.j2 dest=/etc/mysql/conf.d/extend_my.cnf owner=root group=root mode="u=rw,g=r,o=r"
+
+- service: name=mysql state=started
+- service: name=mysql enabled=yes
